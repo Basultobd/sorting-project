@@ -323,7 +323,7 @@ void displaySortOptions(){
 
 }
 
-void sortGrades(int sortMethodSelected, int **gradesList, int studentsNumber, int gradesNumber, char ***subjectsList){
+void sortGrades(int sortMethodSelected, int **gradesList, int studentsNumber, char ***subjectsList){
 
 	int studentIndex;
 

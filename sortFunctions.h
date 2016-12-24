@@ -23,6 +23,6 @@ void fastRecursive(int arrayToSort[MAX_LENGTH], int firstPosition, int endPositi
 void displaySortOptions();
 
 //sort the grades with the selected method
-void sortGrades( int sortMethodSelected, int **gradesList, int studentsNumber, int gradesNumber, char ***subjectsList );
+void sortGrades( int sortMethodSelected, int **gradesList, int studentsNumber, char ***subjectsList );
 
 #endif // SORTFUNCTIONS_H

@@ -74,9 +74,11 @@ int main(int argc, char * argv[]){
 	displaySortOptions();
 	scanf("%d", &sortMethodSelected);
 
-	sortGrades(sortMethodSelected, gradesList, studentsNumber, GRADES_NUMBER, subjectsList);
+	sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
 
-	printFileInformation(subjectsList, namesList, gradesList, studentsNumber, GRADES_NUMBER);
+
+	printf("\n------------ Grades sorted ----------------\n");
+	printFileInformation(subjectsList, namesList, gradesList, studentsNumber);
 
 
 	// // int arrayToSort2[] = {67,15,8,16,44,27,12,35};

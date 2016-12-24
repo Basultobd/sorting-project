@@ -6,6 +6,12 @@
 //header file
 #include "IO.h"
 
+//constants 
+#define BUFFER_SIZE 90
+#define SUBJECT_NAME_SIZE 3
+#define SUBJECTS_NUMBER 10
+#define DELIMITER_SIZE 2
+
 char **getNamesList(const char *filename, int studentsNumber){
 
 	FILE *file = fopen(filename, "r");
@@ -15,18 +21,15 @@ char **getNamesList(const char *filename, int studentsNumber){
 	}
 
 	int nameElementsCounter = 0;
-	int readLineSize = 90;
-	
 	int maxNameSize = 20;
 	int nameElementsNumber = 2;
-	int maxNameElementSize = 10;
 
 	char **namesList;
 	char *token;
 	char userName[20];
-	char readLine[90];
+	char readLine[BUFFER_SIZE];
 
-	const char delimiter[2] = ";";
+	const char delimiter[DELIMITER_SIZE] = ";";
 
 	bool isEOF = false;
 	bool isUsernameComplete = false;
@@ -40,7 +43,7 @@ char **getNamesList(const char *filename, int studentsNumber){
 
 	i = 0;
 	while(!isEOF){
-		if(fgets(readLine, readLineSize, file) == NULL){
+		if(fgets(readLine, BUFFER_SIZE, file) == NULL){
 			isEOF = true;
 		}else{
 
@@ -89,17 +92,15 @@ int **getGradesList(const char *filename, int studentsNumber){
 	}
 
 	int **gradesList;
-	int gradesNumber = 10;
-	int readLineSize = 90;
 	int NumberGradesRead = 0;
 	int registerElementRead = 0;
 	int nameElementsRead = 0;
 	int j;
 
-	char readLine[90];
+	char readLine[BUFFER_SIZE];
 	char *token;
 
-	const char delimiter[2] = ";";
+	const char delimiter[DELIMITER_SIZE] = ";";
 
 	bool isEOF = false;
 	bool isGradesListNotComplete = false;
@@ -109,13 +110,13 @@ int **getGradesList(const char *filename, int studentsNumber){
 
 	int i;
 	for(i = 0; i < studentsNumber; i++){
-		gradesList[i] = malloc(sizeof(int) * gradesNumber);
+		gradesList[i] = malloc(sizeof(int) * SUBJECTS_NUMBER);
 	}
 
 	i = 0;
 	j = 0;
 	while(!isEOF){
-		if(fgets(readLine, readLineSize, file) == NULL){
+		if(fgets(readLine, BUFFER_SIZE, file) == NULL){
 			isEOF = true;
 		}else{
 
@@ -142,7 +143,7 @@ int **getGradesList(const char *filename, int studentsNumber){
 			token = strtok(NULL, delimiter);
 			registerElementRead++;
 
-			isGradesListNotComplete = NumberGradesRead < gradesNumber;
+			isGradesListNotComplete = NumberGradesRead < SUBJECTS_NUMBER;
 			while( isGradesListNotComplete && token != NULL){
 
 				// if is a subject name or the grade 
@@ -158,7 +159,7 @@ int **getGradesList(const char *filename, int studentsNumber){
 				token = strtok(NULL, delimiter);
 
 				//have the name a first and last name
-				isGradesListNotComplete = NumberGradesRead < gradesNumber;
+				isGradesListNotComplete = NumberGradesRead < SUBJECTS_NUMBER;
 			}
 
 			j = 0;
@@ -183,18 +184,15 @@ char ***getSubjectsList(const char *filename, int studentsNumber){
 
 	int i; 
 	int j; 
-	int subjectsNumber = 10;
-	int subjectNameSize = 3;
-	int readLineSize = 90;
 	int NumberSubjectsRead = 0;
 	int registerElementRead = 0;
 	int nameElementsRead = 0;
 
 	char ***subjectsList;
-	char readLine[90];
+	char readLine[BUFFER_SIZE];
 	char *token;
 
-	const char delimiter[2] = ";";
+	const char delimiter[DELIMITER_SIZE] = ";";
 
 	bool isEOF = false;
 	bool isSubjectsListNotComplete = false;
@@ -203,16 +201,16 @@ char ***getSubjectsList(const char *filename, int studentsNumber){
 	subjectsList = malloc(sizeof(char**) * studentsNumber);
 
 	for(i = 0; i < studentsNumber; i++){
-		subjectsList[i] = malloc(sizeof(char*) * subjectsNumber);
-		for(j = 0; j < subjectsNumber; j++){
-			subjectsList[i][j] = malloc(sizeof(char) * subjectNameSize);
+		subjectsList[i] = malloc(sizeof(char*) * SUBJECTS_NUMBER);
+		for(j = 0; j < SUBJECTS_NUMBER; j++){
+			subjectsList[i][j] = malloc(sizeof(char) * SUBJECT_NAME_SIZE);
 		}
 	}
 
 	i = 0;
 	j = 0;
 	while(!isEOF){
-		if(fgets(readLine, readLineSize, file) == NULL){
+		if(fgets(readLine, BUFFER_SIZE, file) == NULL){
 			isEOF = true;
 		}else{
 
@@ -239,7 +237,7 @@ char ***getSubjectsList(const char *filename, int studentsNumber){
 			token = strtok(NULL, delimiter);
 			registerElementRead++;
 
-			isSubjectsListNotComplete = NumberSubjectsRead < subjectsNumber;
+			isSubjectsListNotComplete = NumberSubjectsRead < SUBJECTS_NUMBER;
 			while( isSubjectsListNotComplete && token != NULL){
 
 				// if is a subject name or the grade 
@@ -255,7 +253,7 @@ char ***getSubjectsList(const char *filename, int studentsNumber){
 				token = strtok(NULL, delimiter);
 
 				//have the name a first and last name
-				isSubjectsListNotComplete = NumberSubjectsRead < subjectsNumber;
+				isSubjectsListNotComplete = NumberSubjectsRead < SUBJECTS_NUMBER;
 			}
 
 			j = 0;
@@ -293,14 +291,14 @@ int getStudentsNumber(const char *fileName){
   	return studentsNumber;
 }
 
-void printFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber, int subjectsNumber){
+void printFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber){
 
 	int i;
 	int j;
 
 	for(i = 0; i < studentsNumber; i++){
 		printf("\nName : %s\n", namesList[i]);
-		for(j = 0; j < subjectsNumber; j++){
+		for(j = 0; j < SUBJECTS_NUMBER; j++){
 			printf("Subject %d : %s  - Grade : %d \n", j+1, subjectsList[i][j] , gradesList[i][j]);
 		}
 	}
