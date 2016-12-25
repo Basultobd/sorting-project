@@ -291,6 +291,23 @@ int getStudentsNumber(const char *fileName){
   	return studentsNumber;
 }
 
+char ***newSubjectsList(int studentsNumber){
+
+	int i;
+	int j;
+	char ***newSubjectsList;
+	newSubjectsList = malloc(sizeof(char**) * studentsNumber);
+
+	for(i = 0; i < studentsNumber; i++){
+		newSubjectsList[i] = malloc(sizeof(char*) * SUBJECTS_NUMBER);
+		for(j = 0; j < SUBJECTS_NUMBER; j++){
+			newSubjectsList[i][j] = malloc(sizeof(char) * SUBJECT_NAME_SIZE);
+		}
+	}
+
+	return newSubjectsList;
+}
+
 void printFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber){
 
 	int i;

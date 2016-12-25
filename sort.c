@@ -2,12 +2,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 
 //header
 #include "sort.h"
+#include "IO.h"
 
 //Constants
-#define GRADES_NUMBER 10
+#define SUBJECTS_NUMBER 10
+#define FIRST_SUBJECT_ID 0
+#define LAST_SUBJECT_ID 9
 #define INSERTION_SORT_ID 1
 #define SELECTION_SORT_ID 2
 #define BUBBLE_SORT_RIGHT_ID 3
@@ -28,7 +32,7 @@ void insertionSort( int **gradesList, int studentIndex, char ***subjectsList ){
 
 	char auxStringSubject[SUBJECT_NAME_SIZE];
 
-	for(j = 1; j < GRADES_NUMBER; j++){
+	for(j = 1; j < SUBJECTS_NUMBER; j++){
 	
 		key = gradesList[studentIndex][j];
 		keyIndex = j;
@@ -59,8 +63,8 @@ void selectionSort( int **gradesList, int studentIndex, char ***subjectsList ){
 	int j;
 	int auxValue;
 	char auxStringSubject[SUBJECT_NAME_SIZE];
-	for( i = 0; i < GRADES_NUMBER; i++){
-		for( j = i+1; j < GRADES_NUMBER; j++){
+	for( i = 0; i < SUBJECTS_NUMBER; i++){
+		for( j = i+1; j < SUBJECTS_NUMBER; j++){
 			// printf("gradesList[%d] = %d > gradesList[%d] = %d \n", j, gradesList[j] ,j+1 , gradesList[j+1] );
 			if( gradesList[studentIndex][j] < gradesList[studentIndex][i] ){
 				// printf("SWAP\n");
@@ -86,7 +90,7 @@ void bubbleSortRight( int **gradesList, int studentIndex, char ***subjectsList )
 	int j;
 	int auxValue;
 	char auxStringSubject[SUBJECT_NAME_SIZE];
-	for( i = GRADES_NUMBER - 2; i >= 0; i--){
+	for( i = SUBJECTS_NUMBER - 2; i >= 0; i--){
 		for( j = 0; j < i; j++){
 			// printf("gradesList[%d] = %d > gradesList[%d] = %d \n", j, gradesList[j] ,j+1 , gradesList[j+1] );
 			if( gradesList[studentIndex][j] > gradesList[studentIndex][j+1] ){
@@ -113,8 +117,8 @@ void bubbleSortLeft( int **gradesList, int studentIndex, char ***subjectsList ){
 	int j;
 	int auxValue;
 	char auxStringSubject[SUBJECT_NAME_SIZE];
-	for( i = 0; i < GRADES_NUMBER; i++){
-		for( j = GRADES_NUMBER - 1  ; j > i; j--){
+	for( i = 0; i < SUBJECTS_NUMBER; i++){
+		for( j = SUBJECTS_NUMBER - 1  ; j > i; j--){
 			// printf("gradesList[%d] = %d < gradesList[%d] = %d \n", j-1, gradesList[j-1] ,j , gradesList[j] );
 			if( gradesList[studentIndex][j] < gradesList[studentIndex][j-1] ){
 				// printf("SWAP\n");
@@ -134,7 +138,7 @@ void bubbleSortLeft( int **gradesList, int studentIndex, char ***subjectsList ){
 
 void shellSort( int **gradesList, int studentIndex, char ***subjectsList ){
 
-	int step = GRADES_NUMBER;
+	int step = SUBJECTS_NUMBER;
 	bool isStepSequenceNotFinish;
 	int indexIterator;
 	int auxValue;
@@ -150,7 +154,7 @@ void shellSort( int **gradesList, int studentIndex, char ***subjectsList ){
 			isStepSequenceNotFinish = false;
 			indexIterator = 0;
 
-			while ( (indexIterator + step) < GRADES_NUMBER ){
+			while ( (indexIterator + step) < SUBJECTS_NUMBER ){
 
 				if( gradesList[studentIndex][indexIterator] > gradesList[studentIndex][indexIterator + step]){
 					
@@ -181,58 +185,64 @@ void shellSort( int **gradesList, int studentIndex, char ***subjectsList ){
 	}
 }
 
-void merge( int gradesList[ GRADES_NUMBER ], int lowPosition, int midPosition, int highPosition){
+void merge(int **gradesList, int lowPosition, int midPosition, int highPosition, int studentIndex, char ***subjectsList, char ***auxSubjectList){
 
 
-   int i;
-   int auxArray[ GRADES_NUMBER ];
+	int i;
+	int subjectNumber;
+   	int auxArray[ SUBJECTS_NUMBER ];
 
-   int firstListCounter;
-   int secondListCounter;
-   firstListCounter = lowPosition;
-   secondListCounter = midPosition + 1;
+   	int firstListCounter;
+   	int secondListCounter;
+   	firstListCounter = lowPosition;
+   	secondListCounter = midPosition + 1;
 
-   bool isFirstListEmpty;
-   bool isSecondListEmpty;
-   isFirstListEmpty = firstListCounter <= midPosition;
-   isSecondListEmpty = secondListCounter <= highPosition;
+   	bool isFirstListEmpty;
+   	bool isSecondListEmpty;
+   	isFirstListEmpty = firstListCounter <= midPosition;
+   	isSecondListEmpty = secondListCounter <= highPosition;
 
-   for(firstListCounter = lowPosition, secondListCounter = midPosition + 1, i = lowPosition; isFirstListEmpty && isSecondListEmpty ; i++){
-    	if(gradesList[firstListCounter] <= gradesList[secondListCounter]){
-      		auxArray[i] = gradesList[firstListCounter];
+	for(firstListCounter = lowPosition, secondListCounter = midPosition + 1, i = lowPosition; isFirstListEmpty && isSecondListEmpty ; i++){
+    	if(gradesList[studentIndex][firstListCounter] <= gradesList[studentIndex][secondListCounter]){
+      		auxArray[i] = gradesList[studentIndex][firstListCounter];
+      		strcpy(auxSubjectList[studentIndex][i], subjectsList[studentIndex][firstListCounter]);
       		firstListCounter++;
       	} 
       	else{
-      		auxArray[i] = gradesList[secondListCounter];
+      		auxArray[i] = gradesList[studentIndex][secondListCounter];
+      		strcpy( auxSubjectList[studentIndex][i] , subjectsList[studentIndex][secondListCounter]);
       		secondListCounter++;
       	}  
       	
       	isFirstListEmpty = firstListCounter <= midPosition;
       	isSecondListEmpty = secondListCounter <= highPosition;
-   }
+   	}
    
-   // if remain numbers to add to auxilar list
-   while(firstListCounter <= midPosition){
-   		auxArray[i] = gradesList[firstListCounter];
+   	// if remain numbers to add to auxilar list
+   	while(firstListCounter <= midPosition){
+   		auxArray[i] = gradesList[studentIndex][firstListCounter];
+   		strcpy(auxSubjectList[studentIndex][i], subjectsList[studentIndex][firstListCounter]);
    		i++;
    		firstListCounter++;
-   }
+   	}
    
-   // if remain numbers to add to auxilar list
-   while(secondListCounter <= highPosition){
-   		auxArray[i] = gradesList[secondListCounter];
+   	// if remain numbers to add to auxilar list
+   	while(secondListCounter <= highPosition){
+   		auxArray[i] = gradesList[studentIndex][secondListCounter];
+   		strcpy( auxSubjectList[studentIndex][i] , subjectsList[studentIndex][secondListCounter]);
    		i++;
    		secondListCounter++;
-   }  
+   	}  
       
-   // 
-   for(i = lowPosition; i <= highPosition; i++){
-   		gradesList[i] = auxArray[i];
+   	// 
+   	for(i = lowPosition; i <= highPosition; i++){
+   		gradesList[studentIndex][i] = auxArray[i];
+   		strcpy( subjectsList[studentIndex][i] , auxSubjectList[studentIndex][i]);
     }
 
 }
 
-void mergeSort( int gradesList[ GRADES_NUMBER ], int lowPosition, int highPosition){
+void mergeSort( int **gradesList, int lowPosition, int highPosition, int studentIndex, char ***subjectsList, char ***auxSubjectList){
 
 	// int j;
 	int midPosition;
@@ -245,66 +255,77 @@ void mergeSort( int gradesList[ GRADES_NUMBER ], int lowPosition, int highPositi
 
 		midPosition = (lowPosition + highPosition) / 2;
 		// printf("\n LEFT\n");
-		mergeSort(gradesList, lowPosition, midPosition);
+		mergeSort(gradesList, lowPosition, midPosition, studentIndex, subjectsList, auxSubjectList);
 		// printf("\n RIGHT\n");
-		mergeSort(gradesList, midPosition+1, highPosition);
-		merge(gradesList, lowPosition, midPosition, highPosition);
+		mergeSort(gradesList, midPosition+1, highPosition, studentIndex, subjectsList, auxSubjectList);
+
+		merge(gradesList, lowPosition, midPosition, highPosition, studentIndex, subjectsList, auxSubjectList);
 	}
 
 }
 
-void quicksort(int gradesList[ GRADES_NUMBER ], int firstPositon ,int endPosition){
-	fastRecursive(gradesList, firstPositon, endPosition);
+void quicksort(int **gradesList, int firstPosition ,int endPosition, int studentIndex, char ***subjectsList){
+	fastRecursive(gradesList, firstPosition, endPosition, studentIndex, subjectsList);
 }
 
-void fastRecursive(int gradesList[GRADES_NUMBER], int beginPosition, int endPosition){
+void fastRecursive(int **gradesList, int beginPosition, int endPosition, int studentIndex, char ***subjectsList){
 
-	int firstPositon = beginPosition;
-	int lastPositon = endPosition;
+	int firstPosition = beginPosition;
+	int lastPosition = endPosition;
 	int actualPosition = beginPosition;
 	int auxValue;
+
+	char auxStringSubject[ SUBJECT_NAME_SIZE ];
+
 	bool flag = true;
 
 	while(flag){
 
 		flag = false;
 		
-		while(gradesList[actualPosition] <= gradesList[lastPositon] && actualPosition != lastPositon){
-			lastPositon--;
+		while(gradesList[studentIndex][actualPosition] <= gradesList[studentIndex][lastPosition] && actualPosition != lastPosition){
+			lastPosition--;
 		}
 
 		//entra si es mas grande 
 		// pasa de adelante a atras
-		if(actualPosition != lastPositon){
-			auxValue = gradesList[actualPosition];
-			gradesList[actualPosition] = gradesList[lastPositon];
-			gradesList[lastPositon] = auxValue;
-			actualPosition = lastPositon;
+		if(actualPosition != lastPosition){
+			auxValue = gradesList[studentIndex][actualPosition];
+			strcpy(auxStringSubject, subjectsList[studentIndex][actualPosition]);
+			gradesList[studentIndex][actualPosition] = gradesList[studentIndex][lastPosition];
+			strcpy(subjectsList[studentIndex][actualPosition], subjectsList[studentIndex][lastPosition]);
+			gradesList[studentIndex][lastPosition] = auxValue;
+			strcpy(subjectsList[studentIndex][lastPosition], auxStringSubject);
+			actualPosition = lastPosition;
 
-			while(gradesList[actualPosition] >= gradesList[firstPositon] && actualPosition != firstPositon){
-				firstPositon++;
+			while(gradesList[studentIndex][actualPosition] >= gradesList[studentIndex][firstPosition] && actualPosition != firstPosition){
+				firstPosition++;
 			}
 
 			//entra si es mas pequeño
 			// pasa de atras a adelante
-			if(actualPosition != firstPositon)
+			if(actualPosition != firstPosition){
 				flag = true;
-				auxValue = gradesList[actualPosition];
-				gradesList[actualPosition] = gradesList[firstPositon];
-				gradesList[firstPositon] = auxValue;
-				actualPosition = firstPositon;
+				auxValue = gradesList[studentIndex][actualPosition];
+				strcpy(auxStringSubject, subjectsList[studentIndex][actualPosition]);
+				gradesList[studentIndex][actualPosition] = gradesList[studentIndex][firstPosition];
+				strcpy(subjectsList[studentIndex][actualPosition], subjectsList[studentIndex][firstPosition]);
+				gradesList[studentIndex][firstPosition] = auxValue;
+				strcpy(subjectsList[studentIndex][firstPosition], auxStringSubject);
+				actualPosition = firstPosition;
+			}
 
 		}
 
 	}
 	
 	if((actualPosition - 1) > beginPosition){
-		fastRecursive(gradesList, beginPosition, actualPosition-1);
+		fastRecursive(gradesList, beginPosition, actualPosition-1, studentIndex, subjectsList);
 		}
 
 	if((actualPosition + 1) < endPosition){
 		// printf("%d\n", endPosition );
-		fastRecursive(gradesList, actualPosition+1, endPosition);
+		fastRecursive(gradesList, actualPosition+1, endPosition, studentIndex, subjectsList);
 		}
 }
 
@@ -326,6 +347,7 @@ void displaySortOptions(){
 void sortGrades(int sortMethodSelected, int **gradesList, int studentsNumber, char ***subjectsList){
 
 	int studentIndex;
+	char ***auxSubjectsList;
 
 	switch(sortMethodSelected){
 
@@ -369,19 +391,33 @@ void sortGrades(int sortMethodSelected, int **gradesList, int studentsNumber, ch
 
 			break;
 
-		// case MERGE_SORT_ID:
+		case MERGE_SORT_ID:
 
-		// case QUICKSORT_SORT_ID:
+			auxSubjectsList = newSubjectsList(studentsNumber);
+
+			for(studentIndex = 0; studentIndex < studentsNumber; studentIndex++){
+				mergeSort(gradesList, FIRST_SUBJECT_ID, LAST_SUBJECT_ID, studentIndex, subjectsList, auxSubjectsList);
+			}
+
+			break;
+
+		case QUICKSORT_SORT_ID:
+
+			for(studentIndex = 0; studentIndex < studentsNumber; studentIndex++){
+				quicksort(gradesList, FIRST_SUBJECT_ID, LAST_SUBJECT_ID, studentIndex, subjectsList);
+			}
+
+			break;
 
 	}
 
 }
 
 
-// void printGradesList( int **gradesList, int studentIndex){
-// 	int gradeIndex;
-// 	for(gradeIndex = 0; gradeIndex < GRADES_NUMBER; gradeIndex++ ){
-// 		printf("%d ", gradesList[studentIndex][gradeIndex] );
-// 	}
+void printGradesList( int **gradesList, int studentIndex){
+	int gradeIndex;
+	for(gradeIndex = 0; gradeIndex < SUBJECTS_NUMBER; gradeIndex++ ){
+		printf("%d ", gradesList[studentIndex][gradeIndex] );
+	}
 
-// }
+}

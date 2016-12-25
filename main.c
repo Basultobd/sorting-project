@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 
-#include "sortFunctions.h"
+#include "sort.h"
 #include "IO.h"
 
 #define EXIT_VALUE 0
@@ -75,7 +75,6 @@ int main(int argc, char * argv[]){
 	scanf("%d", &sortMethodSelected);
 
 	sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
-
 
 	printf("\n------------ Grades sorted ----------------\n");
 	printFileInformation(subjectsList, namesList, gradesList, studentsNumber);

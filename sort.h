@@ -9,15 +9,16 @@ void bubbleSortRight( int **gradesList, int studentIndex, char ***subjectsList )
 void selectionSort( int **arrayToSort, int studentIndex, char ***subjectsList );
 void shellSort( int **gradesList, int studentIndex, char ***subjectsList );
 
+ 
+void mergeSort(int **gradesList, int lowPosition, int highPosition, int studentIndex, char ***subjectsList, char ***auxStringSubjectList);
+void merge( int **gradesList, int lowPosition, int midPosition, int highPosition, int studentIndex, char ***subjectsList, char ***auxStringSubjectList);
 
+//the first three parametres are the requiered for the sort 
+void quicksort( int **gradesList, int firstPosition, int lastPosition, int studentIndex, char ***subjectsList);
+void fastRecursive(int **gradesList, int firstPosition, int endPosition, int studentIndex, char ***subjectsList);
 
-void mergeSort(int arrayToSort[MAX_LENGTH], int lowPosition, int highPosition );
-void merge( int arrayToSort[ MAX_LENGTH ], int lowPosition, int midPosition, int highPosition);
-void quicksort( int arrayToSort[MAX_LENGTH], int firstPosition, int lastPosition);
-void fastRecursive(int arrayToSort[MAX_LENGTH], int firstPosition, int endPosition);
-
-// //print function
-// void printGradesList( int **arrayToSort, int i);
+//print function
+void printGradesList( int **arrayToSort, int i);
 
 //display sort options 
 void displaySortOptions();

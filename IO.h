@@ -4,6 +4,8 @@
 int **getGradesList(const char *fileName, int alumniNumber);
 char **getNamesList( const char *fileName, int alumniNumber);
 char ***getSubjectsList( const char *fileName, int alumniNumber);
+
+char ***newSubjectsList(int studentsNumber);
 int getStudentsNumber(const char *fileName);
 void printFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber);
 
