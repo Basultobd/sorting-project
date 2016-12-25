@@ -11,8 +11,9 @@
 #define SUBJECT_NAME_SIZE 3
 #define SUBJECTS_NUMBER 10
 #define DELIMITER_SIZE 2
+#define MAX_NAME_SIZE 25
 
-char **getNamesList(const char *filename, int studentsNumber){
+char **loadNamesList(const char *filename, int studentsNumber){
 
 	FILE *file = fopen(filename, "r");
 
@@ -21,15 +22,14 @@ char **getNamesList(const char *filename, int studentsNumber){
 	}
 
 	int nameElementsCounter = 0;
-	int maxNameSize = 20;
 	int nameElementsNumber = 2;
 
 	char **namesList;
 	char *token;
-	char userName[20];
+	char userName[MAX_NAME_SIZE];
 	char readLine[BUFFER_SIZE];
 
-	const char delimiter[DELIMITER_SIZE] = ";";
+	const char delimiter[DELIMITER_SIZE] = " ";
 
 	bool isEOF = false;
 	bool isUsernameComplete = false;
@@ -38,7 +38,7 @@ char **getNamesList(const char *filename, int studentsNumber){
 
 	int i;
 	for (i = 0; i < studentsNumber; i++){
-		namesList[i] = malloc(sizeof(char) * maxNameSize);
+		namesList[i] = malloc(sizeof(char) * MAX_NAME_SIZE);
 	}
 
 	i = 0;
@@ -83,7 +83,7 @@ char **getNamesList(const char *filename, int studentsNumber){
 
 }
 
-int **getGradesList(const char *filename, int studentsNumber){
+int **loadGradesList(const char *filename, int studentsNumber){
 
 	FILE *file = fopen(filename, "r");
 
@@ -100,7 +100,7 @@ int **getGradesList(const char *filename, int studentsNumber){
 	char readLine[BUFFER_SIZE];
 	char *token;
 
-	const char delimiter[DELIMITER_SIZE] = ";";
+	const char delimiter[DELIMITER_SIZE] = " ";
 
 	bool isEOF = false;
 	bool isGradesListNotComplete = false;
@@ -174,7 +174,7 @@ int **getGradesList(const char *filename, int studentsNumber){
 	return gradesList;
 }
 
-char ***getSubjectsList(const char *filename, int studentsNumber){
+char ***loadSubjectsList(const char *filename, int studentsNumber){
 
 	FILE *file = fopen(filename, "r");
 
@@ -192,7 +192,7 @@ char ***getSubjectsList(const char *filename, int studentsNumber){
 	char readLine[BUFFER_SIZE];
 	char *token;
 
-	const char delimiter[DELIMITER_SIZE] = ";";
+	const char delimiter[DELIMITER_SIZE] = " ";
 
 	bool isEOF = false;
 	bool isSubjectsListNotComplete = false;
@@ -306,6 +306,33 @@ char ***newSubjectsList(int studentsNumber){
 	}
 
 	return newSubjectsList;
+}
+
+char **newNamesList(int studentsNumber){
+
+	int i;
+	int j;
+	char **newNamesList;
+	newNamesList = malloc(sizeof(char*) * studentsNumber);	
+
+	for (i = 0; i < studentsNumber; i++){
+		newNamesList[i] = malloc(sizeof(char) * MAX_NAME_SIZE);
+	}
+
+	return newNamesList;
+}
+
+int **newGradesList(int studentsNumber){
+
+	int i;
+	int **newGradesList;
+
+	newGradesList = malloc(sizeof(int*) * studentsNumber);
+
+	for(i = 0; i < studentsNumber; i++){
+		newGradesList[i] = malloc(sizeof(int) * SUBJECTS_NUMBER);
+	}
+
 }
 
 void printFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber){

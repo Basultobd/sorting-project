@@ -57,11 +57,14 @@ int main(int argc, char * argv[]){
 
 		//get the students number
 		studentsNumber = getStudentsNumber(srcFilename);
+		// namesList = newNamesList();
+		// gradesList = newGradesList();
+		// subjectsList = newSubjectsList();
 
 		//get all the required info
-		namesList = getNamesList(srcFilename, studentsNumber);
-		gradesList = getGradesList(srcFilename, studentsNumber);
-		subjectsList = getSubjectsList(srcFilename, studentsNumber);
+		namesList = loadNamesList(srcFilename, studentsNumber);
+		gradesList = loadGradesList(srcFilename, studentsNumber);
+		subjectsList = loadSubjectsList(srcFilename, studentsNumber);
 
 		printf("Done\n\n");
 
