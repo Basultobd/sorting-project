@@ -25,6 +25,7 @@ int main(int argc, char * argv[]){
 	// ---------------- New student register -----------
 	char studentName[MAX_NAME_SIZE];
 	int studentGrades[SUBJECTS_NUMBER];
+	// -------------------------------------------------
 
 	int i;
 	int j;
