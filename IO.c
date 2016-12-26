@@ -13,18 +13,18 @@
 #define DELIMITER_SIZE 2
 #define MAX_NAME_SIZE 25
 
-char **loadNamesList(const char *filename, int studentsNumber){
+void loadNames(const char *filename, int studentsNumber, char **namesList){
 
 	FILE *file = fopen(filename, "r");
 
 	if(file == NULL){
-		return NULL;
+		return;
 	}
 
 	int nameElementsCounter = 0;
 	int nameElementsNumber = 2;
+	int i;
 
-	char **namesList;
 	char *token;
 	char userName[MAX_NAME_SIZE];
 	char readLine[BUFFER_SIZE];
@@ -33,13 +33,6 @@ char **loadNamesList(const char *filename, int studentsNumber){
 
 	bool isEOF = false;
 	bool isUsernameComplete = false;
-
-	namesList = malloc(sizeof(char*) * studentsNumber);	
-
-	int i;
-	for (i = 0; i < studentsNumber; i++){
-		namesList[i] = malloc(sizeof(char) * MAX_NAME_SIZE);
-	}
 
 	i = 0;
 	while(!isEOF){
@@ -79,23 +72,22 @@ char **loadNamesList(const char *filename, int studentsNumber){
 	}
 
 	fclose(file);
-	return namesList;
 
 }
 
-int **loadGradesList(const char *filename, int studentsNumber){
+void loadGrades(const char *filename, int studentsNumber, int **gradesList){
 
 	FILE *file = fopen(filename, "r");
 
 	if(file == NULL){
-		return NULL;
+		return;
 	}
 
-	int **gradesList;
 	int NumberGradesRead = 0;
 	int registerElementRead = 0;
 	int nameElementsRead = 0;
 	int j;
+	int i;
 
 	char readLine[BUFFER_SIZE];
 	char *token;
@@ -105,13 +97,6 @@ int **loadGradesList(const char *filename, int studentsNumber){
 	bool isEOF = false;
 	bool isGradesListNotComplete = false;
 	bool areAllNameElementsAvoided = false;
-
-	gradesList = malloc(sizeof(int*) * studentsNumber);
-
-	int i;
-	for(i = 0; i < studentsNumber; i++){
-		gradesList[i] = malloc(sizeof(int) * SUBJECTS_NUMBER);
-	}
 
 	i = 0;
 	j = 0;
@@ -171,15 +156,14 @@ int **loadGradesList(const char *filename, int studentsNumber){
 	}
 
 	fclose(file);
-	return gradesList;
 }
 
-char ***loadSubjectsList(const char *filename, int studentsNumber){
+void loadSubjectsNames(const char *filename, int studentsNumber, char ***subjectsList){
 
 	FILE *file = fopen(filename, "r");
 
 	if(file == NULL){
-		return NULL;
+		return;
 	}
 
 	int i; 
@@ -188,7 +172,6 @@ char ***loadSubjectsList(const char *filename, int studentsNumber){
 	int registerElementRead = 0;
 	int nameElementsRead = 0;
 
-	char ***subjectsList;
 	char readLine[BUFFER_SIZE];
 	char *token;
 
@@ -197,15 +180,6 @@ char ***loadSubjectsList(const char *filename, int studentsNumber){
 	bool isEOF = false;
 	bool isSubjectsListNotComplete = false;
 	bool areAllNameElementsAvoided = false;
-
-	subjectsList = malloc(sizeof(char**) * studentsNumber);
-
-	for(i = 0; i < studentsNumber; i++){
-		subjectsList[i] = malloc(sizeof(char*) * SUBJECTS_NUMBER);
-		for(j = 0; j < SUBJECTS_NUMBER; j++){
-			subjectsList[i][j] = malloc(sizeof(char) * SUBJECT_NAME_SIZE);
-		}
-	}
 
 	i = 0;
 	j = 0;
@@ -264,7 +238,6 @@ char ***loadSubjectsList(const char *filename, int studentsNumber){
 	}
 
 	fclose(file);
-	return subjectsList;
 }
 
 
@@ -333,9 +306,19 @@ int **newGradesList(int studentsNumber){
 		newGradesList[i] = malloc(sizeof(int) * SUBJECTS_NUMBER);
 	}
 
+	return newGradesList;
+
 }
 
-void printFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber){
+void displayProgramOptions(){
+	printf("------- Program options ------- \n"
+		"1. New student register \n"
+		"2. Sort registers \n"
+		"3. Exit \n"
+		"Choose an option: ");
+}
+
+void displayFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber){
 
 	int i;
 	int j;

@@ -6,101 +6,106 @@
 #include "sort.h"
 #include "IO.h"
 
+
+#define SUBJECTS_NUMBER 10
+#define NEW_REGISTER 1
+#define SORT_REGISTERS 2
 #define EXIT_VALUE 0
-#define GRADES_NUMBER 10
+#define MAX_NAME_SIZE 25
+#define EXIT_OPTION 3
 
 int main(int argc, char * argv[]){
-	
 
-	int l;
-	int i,j;
-
-	char ***subjectsList;
+	// ---------------- File information ---------------
 	char **namesList;
 	int **gradesList;
+	char ***subjectsList;
+	// -------------------------------------------------
+
+	// ---------------- New student register -----------
+	char studentName[MAX_NAME_SIZE];
+	int studentGrades[SUBJECTS_NUMBER];
+
+	int i;
+	int j;
+
 	int studentsNumber;
 	int sortMethodSelected;
+	int programActionSelected;
 
 	char *srcFilename;
 	char *dstFilename;
-
-	char loadOption; 
-
-	bool isInputFormatValid = argc == 2;
+	bool isInputFormatValid = (argc == 2);
 	bool isValidAnswer = false;
 	bool isAffirmativeAnswer = false;
 
+	FILE *file;
+
 	if(isInputFormatValid){
-		printf("Invalid input format! - Input format: <program name> <srcFilename.txt> <dstFilename.txt>\n");
-		return EXIT_VALUE;
-	}else{
 		srcFilename = argv[1];
-		dstFilename = argv[2];
-	}
-
-	printf("Do you want to load the students information - Y or N: ");
-	scanf("%c", &loadOption);
-
-	isValidAnswer = (loadOption == 'Y' || loadOption == 'N');
-	while(!isValidAnswer){
-		//clean the buffer
-		fflush(stdin);
-		printf("Please insert a valid option -  Y or N: ");
-		scanf("%c", &loadOption);
-		isValidAnswer = (loadOption == 'Y' || loadOption == 'N');
-	}
-
-	isAffirmativeAnswer = (loadOption == 'Y');
-	if(isAffirmativeAnswer){
-
-		printf("\nloading info...\n" );
-
-		//get the students number
-		studentsNumber = getStudentsNumber(srcFilename);
-		// namesList = newNamesList();
-		// gradesList = newGradesList();
-		// subjectsList = newSubjectsList();
-
-		//get all the required info
-		namesList = loadNamesList(srcFilename, studentsNumber);
-		gradesList = loadGradesList(srcFilename, studentsNumber);
-		subjectsList = loadSubjectsList(srcFilename, studentsNumber);
-
-		printf("Done\n\n");
-
 	}else{
-
-		printf("See you soon\n");
+		printf("Invalid input format! - Input format: <program name> <srcFilename.txt>\n");
 		return EXIT_VALUE;
 	}
 
-	displaySortOptions();
-	scanf("%d", &sortMethodSelected);
 
-	sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
+	displayProgramOptions();
+	scanf("%d", &programActionSelected);
 
-	printf("\n------------ Grades sorted ----------------\n");
-	printFileInformation(subjectsList, namesList, gradesList, studentsNumber);
+	switch(programActionSelected){
 
+		case NEW_REGISTER:
 
-	// // int arrayToSort2[] = {67,15,8,16,44,27,12,35};
-	//  // int arrayToSort2[] = {38,27,43,3,9,82,10};
-	// int arrayToSort2[] = {15,67,8,16,44,27,12,35};
+		fflush(stdin);
 
-	// //bubbleSortLeft(arrayToSort2);
-	// //selectionSort(arrayToSort2);
-	// // shellSort(arrayToSort2);
-	// //mergeSort(arrayToSort2, 0, MAX_LENGTH-1);
-	// quicksort(arrayToSort2, 0, MAX_LENGTH-1);
+		printf("Insert name (first name - last name): ");
+		gets(studentName);
 
-	// printGradesList(arrayToSort2);
+		fflush(stdin);
+
+		// printToFile(studentName, gradesList);
+
+		break;
 
 
+		case SORT_REGISTERS:
 
-	free(namesList);
-	free(gradesList);
-	free(subjectsList);
+			printf("\nloading info...\n" );
+
+			//get the students number
+			studentsNumber = getStudentsNumber(srcFilename);
+
+			//create lists
+			namesList = newNamesList(studentsNumber);
+			subjectsList = newSubjectsList(studentsNumber);
+			gradesList = newGradesList(studentsNumber);
 		
+			//get all the required info
+			loadNames(srcFilename, studentsNumber, namesList);
+			loadSubjectsNames(srcFilename, studentsNumber, subjectsList);
+			loadGrades(srcFilename, studentsNumber, gradesList);
 
+			printf("Done\n\n");
+
+			displaySortOptions();
+			scanf("%d", &sortMethodSelected);
+			sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
+
+			printf("\n------------ Grades sorted ----------------\n");
+			displayFileInformation(subjectsList, namesList, gradesList, studentsNumber);
+
+			free(namesList);
+			free(gradesList);
+			free(subjectsList);
+
+			break;
+
+		case EXIT_OPTION:
+
+			printf("See you soon\n");
+			return EXIT_VALUE;
+
+	}
+		
 	return EXIT_VALUE;
 }
