@@ -1,6 +1,5 @@
 #ifndef SORT_H
 #define SORTFUNCTIONS_H
-#define MAX_LENGTH 10
 
 // sort functions
 void insertionSort( int **arrayToSort, int studentIndex, char ***subjectsList );

@@ -1,7 +1,6 @@
 #ifndef IO_H
 #define IO_H
 
-#define SUBJECTS_NUMBER 10
 
 // load the info in the created lists
 void loadGrades(const char *fileName, int alumniNumber, int **gradesList);
