@@ -330,19 +330,6 @@ void fastRecursive(int **gradesList, int beginPosition, int endPosition, int stu
 }
 
 
-void displaySortOptions(){
-
-	printf("-- Sort options -- \n"
-		"1. Insertionsort \n"
-		"2. Selectionsort \n"
-		"3. Bubblesort right \n"
-		"4. Bubblesort left \n"
-		"5. Shellsort \n"
-		"6. Mergesort \n"
-		"7. Quicksort \n"
-		"Choose an option: ");
-
-}
 
 void sortGrades(int sortMethodSelected, int **gradesList, int studentsNumber, char ***subjectsList){
 
@@ -413,11 +400,87 @@ void sortGrades(int sortMethodSelected, int **gradesList, int studentsNumber, ch
 
 }
 
+float *calculateAverages(int **gradesList, int studentsNumber){
+	int studentIndex;
+	int gradeIndex;
+	float average = 0.0;
+	float *averageList = malloc(sizeof(float) * studentsNumber);
 
-void printGradesList( int **gradesList, int studentIndex){
+	for(studentIndex = 0; studentIndex < studentsNumber; studentIndex++){
+		for(gradeIndex = 0; gradeIndex < SUBJECTS_NUMBER; gradeIndex++){
+			average = average + (float)gradesList[studentIndex][gradeIndex];
+		}
+
+		averageList[studentIndex] = average / SUBJECTS_NUMBER;
+		average = 0.0;
+	}
+
+	return averageList;
+}
+
+int *getSortedPositions(float *averagesList, int studentsNumber){
+	
+	int *positions = malloc(sizeof(int) * studentsNumber);
+	int i;
+
+	for(i = 0; i < studentsNumber; i++){
+		positions[i] = i;
+	}
+
+	sort(averagesList, positions, studentsNumber);
+
+	return positions;
+
+}
+
+
+void sort(float *averagesList, int *positions, int studentsNumber){
+	int i;
+	int j;
+	float key = 0.0;
+	int key2;
+	bool isFirstPosition;
+	bool isActualNumberGTKey;
+
+	for(j = 1; j < studentsNumber; j++){
+	
+		key = averagesList[j];
+		key2 = positions[j];
+		i = j - 1;
+
+		isFirstPosition = (i >= 0);
+		isActualNumberGTKey = averagesList[i] > key;
+
+		while( isFirstPosition && isActualNumberGTKey ){
+
+			averagesList[i+1] = averagesList[i];
+			positions[i+1] = positions[i];
+
+			i = i - 1;
+			averagesList[i+1] = key;
+			positions[i+1] = key2;
+
+			isFirstPosition = (i >= 0);
+			isActualNumberGTKey = averagesList[i] > key;
+		}
+	}
+
+}
+
+
+void printGradesList(int **gradesList, int studentIndex){
 	int gradeIndex;
 	for(gradeIndex = 0; gradeIndex < SUBJECTS_NUMBER; gradeIndex++ ){
 		printf("%d ", gradesList[studentIndex][gradeIndex] );
 	}
 
 }
+
+void printAveragesList( float *averagesList, int studentsNumber ){
+	int averageIndex;
+	for(averageIndex = 0; averageIndex < studentsNumber; averageIndex++ ){
+		printf("El promedio del estudiante %d es : %.1f \n", averageIndex+1, averagesList[averageIndex] );
+	}
+}
+
+

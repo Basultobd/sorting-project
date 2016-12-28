@@ -13,6 +13,7 @@
 #define EXIT_VALUE 0
 #define MAX_NAME_SIZE 25
 #define EXIT_OPTION 3
+#define MAX_FILENAME_SIZE 20
 
 int main(int argc, char * argv[]){
 
@@ -25,7 +26,11 @@ int main(int argc, char * argv[]){
 	// ---------------- New student register -----------
 	char studentName[MAX_NAME_SIZE];
 	int studentGrades[SUBJECTS_NUMBER];
+	char **subjectsNames;
 	// -------------------------------------------------
+
+	float *averagesList;
+	int *sortedPositions;
 
 	int i;
 	int j;
@@ -35,7 +40,10 @@ int main(int argc, char * argv[]){
 	int programActionSelected;
 
 	char *srcFilename;
-	char *dstFilename;
+	char dstFilename[MAX_FILENAME_SIZE];
+
+	const char *subjectsFile = "subjects.txt";
+
 	bool isInputFormatValid = (argc == 2);
 	bool isValidAnswer = false;
 	bool isAffirmativeAnswer = false;
@@ -57,17 +65,28 @@ int main(int argc, char * argv[]){
 
 		case NEW_REGISTER:
 
-		fflush(stdin);
+			fflush(stdin);
 
-		printf("Insert name (first name - last name): ");
-		gets(studentName);
+			printf("Insert name (first name - last name): ");
+			gets(studentName);
 
-		fflush(stdin);
+			fflush(stdin);
 
-		// printToFile(studentName, gradesList);
+			subjectsNames = getSubjectsNames("subjects.txt");
 
-		break;
+			fflush(stdin);
 
+			for(i = 0; i < SUBJECTS_NUMBER; i++){
+				printf("Grade of subject %s: ", subjectsNames[i]);
+				fflush(stdin);
+				scanf("%d",&studentGrades[i]);  
+			}
+
+			addRegisterFile(srcFilename, studentName, studentGrades, subjectsNames);
+
+			free(subjectsNames);
+
+			break;
 
 		case SORT_REGISTERS:
 
@@ -80,6 +99,8 @@ int main(int argc, char * argv[]){
 			namesList = newNamesList(studentsNumber);
 			subjectsList = newSubjectsList(studentsNumber);
 			gradesList = newGradesList(studentsNumber);
+
+			//considerar poner getStudenstNumber en sort.c
 		
 			//get all the required info
 			loadNames(srcFilename, studentsNumber, namesList);
@@ -93,8 +114,23 @@ int main(int argc, char * argv[]){
 			sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
 
 			printf("\n------------ Grades sorted ----------------\n");
-			displayFileInformation(subjectsList, namesList, gradesList, studentsNumber);
+			// displayFileInformation(subjectsList, namesList, gradesList, studentsNumber);
 
+			averagesList = calculateAverages(gradesList, studentsNumber);
+
+			sortedPositions = getSortedPositions(averagesList,studentsNumber);
+
+			fflush(stdin);
+
+			printf("Insert the name of the destiny file: ");
+			gets(dstFilename);
+
+			printToFile(namesList, gradesList, subjectsList, averagesList, studentsNumber, sortedPositions, dstFilename);
+
+			printf("File created...\n");
+
+			free(sortedPositions);
+			free(averagesList);
 			free(namesList);
 			free(gradesList);
 			free(subjectsList);

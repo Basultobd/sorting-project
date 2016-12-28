@@ -8,10 +8,12 @@
 
 //constants 
 #define BUFFER_SIZE 90
+#define BUFFER_SUBJECT_SIZE 3
 #define SUBJECT_NAME_SIZE 3
 #define SUBJECTS_NUMBER 10
 #define DELIMITER_SIZE 2
 #define MAX_NAME_SIZE 25
+#define NEW_LINE_SIZE 2
 
 void loadNames(const char *filename, int studentsNumber, char **namesList){
 
@@ -310,6 +312,54 @@ int **newGradesList(int studentsNumber){
 
 }
 
+char **getSubjectsNames(const char *filename){
+
+	FILE *file = fopen(filename, "r");
+
+	int i;
+	int subjectNameIndex = 0;
+	int elementsToRead = 1;
+
+	char **subjectsNames;
+	char line[BUFFER_SUBJECT_SIZE];
+	char subject[SUBJECT_NAME_SIZE];
+
+	subjectsNames = malloc(sizeof(char*) * SUBJECTS_NUMBER);
+
+	bool isEOF = false;
+
+	i = 0;
+	while(!isEOF){
+		if(fgets(line, BUFFER_SUBJECT_SIZE , file) == NULL){
+			isEOF = true;
+		}else{
+
+			fflush(stdin);
+
+			//only read one element 
+			strncpy(subject, line, elementsToRead);
+
+			//null character
+			subject[subjectNameIndex+1] = '\0';
+
+			//subject name 
+			subjectsNames[i] = malloc(sizeof(char) * SUBJECT_NAME_SIZE);
+
+			//copy the name in the list 
+			strcpy(subjectsNames[i], subject);
+
+			i++;
+
+		}
+	}
+
+	fclose(file);
+	return subjectsNames; 
+
+}
+
+	
+
 void displayProgramOptions(){
 	printf("------- Program options ------- \n"
 		"1. New student register \n"
@@ -317,6 +367,21 @@ void displayProgramOptions(){
 		"3. Exit \n"
 		"Choose an option: ");
 }
+
+void displaySortOptions(){
+
+	printf("-- Sort options -- \n"
+		"1. Insertionsort \n"
+		"2. Selectionsort \n"
+		"3. Bubblesort right \n"
+		"4. Bubblesort left \n"
+		"5. Shellsort \n"
+		"6. Mergesort \n"
+		"7. Quicksort \n"
+		"Choose an option: ");
+
+}
+
 
 void displayFileInformation(char ***subjectsList, char **namesList, int **gradesList, int studentsNumber){
 
@@ -330,4 +395,57 @@ void displayFileInformation(char ***subjectsList, char **namesList, int **grades
 		}
 	}
 	
+}
+
+void addRegisterFile(char *filename, char *studentName, int gradesList[], char **subjectsNames){
+	
+	FILE *file = fopen(filename,  "a");
+
+	int i;
+
+	char newLine[NEW_LINE_SIZE] = "\n";
+
+	fprintf(file,newLine);
+	fprintf(file, "%s" ,studentName);
+
+	for(i = 0; i < SUBJECTS_NUMBER; i++){
+		fprintf(file, " %s %d", subjectsNames[i], gradesList[i]);
+	}
+
+	// fprintf(file,newLine);
+
+	fclose(file);
+
+
+}
+
+void printToFile(char **namesList, int **gradesList, char ***subjectsList, float *averagesList, int studentsNumber, int *positions, char *dstFilename){
+
+	FILE *file = fopen(dstFilename,  "w");
+
+	int i;
+	int j;
+
+	int studentIndex;
+
+	char newLine[NEW_LINE_SIZE] = "\n";
+
+	for(i = 0; i < studentsNumber; i++){
+
+		studentIndex = positions[i];
+		fprintf(file, "%d - ", i+1);
+		fprintf(file, "%s" , namesList[studentIndex]);
+
+		for(j = 0; j < SUBJECTS_NUMBER; j++){
+			fprintf(file, " %s %d",subjectsList[studentIndex][j], gradesList[studentIndex][j]);
+		}
+
+		fprintf(file, " - Av: %f", averagesList[i]);
+		fprintf(file,newLine);
+	}
+
+	
+
+	fclose(file);
+
 }
