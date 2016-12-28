@@ -13,7 +13,6 @@
 #define SUBJECTS_NUMBER 10
 #define DELIMITER_SIZE 2
 #define MAX_NAME_SIZE 25
-#define NEW_LINE_SIZE 2
 
 void loadNames(const char *filename, int studentsNumber, char **namesList){
 
@@ -403,9 +402,9 @@ void addRegisterFile(char *filename, char *studentName, int gradesList[], char *
 
 	int i;
 
-	char newLine[NEW_LINE_SIZE] = "\n";
+	char newLine = '\n';
 
-	fprintf(file,newLine);
+	fprintf(file,"%c", newLine);
 	fprintf(file, "%s" ,studentName);
 
 	for(i = 0; i < SUBJECTS_NUMBER; i++){
@@ -428,7 +427,7 @@ void printToFile(char **namesList, int **gradesList, char ***subjectsList, float
 
 	int studentIndex;
 
-	char newLine[NEW_LINE_SIZE] = "\n";
+	char newLine = '\n';
 
 	for(i = 0; i < studentsNumber; i++){
 
@@ -441,7 +440,7 @@ void printToFile(char **namesList, int **gradesList, char ***subjectsList, float
 		}
 
 		fprintf(file, " - Av: %f", averagesList[i]);
-		fprintf(file,newLine);
+		fprintf(file,"%c", newLine);
 	}
 
 	

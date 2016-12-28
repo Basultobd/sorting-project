@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 #include "sort.h"
@@ -11,7 +12,7 @@
 #define NEW_REGISTER 1
 #define SORT_REGISTERS 2
 #define EXIT_VALUE 0
-#define MAX_NAME_SIZE 25
+#define MAX_NAME_SIZE 15
 #define EXIT_OPTION 3
 #define MAX_FILENAME_SIZE 20
 
@@ -40,6 +41,7 @@ int main(int argc, char * argv[]){
 	int programActionSelected;
 
 	char *srcFilename;
+	char *p;
 	char dstFilename[MAX_FILENAME_SIZE];
 
 	const char *subjectsFile = "subjects.txt";
@@ -59,26 +61,22 @@ int main(int argc, char * argv[]){
 
 
 	displayProgramOptions();
-	scanf("%d", &programActionSelected);
+	scanf("%d%*c", &programActionSelected);
 
 	switch(programActionSelected){
 
 		case NEW_REGISTER:
 
-			fflush(stdin);
-
 			printf("Insert name (first name - last name): ");
-			gets(studentName);
+			fgets(studentName, MAX_NAME_SIZE, stdin );
 
-			fflush(stdin);
+			p = strchr(studentName,'\n');
+   			if (p) *p = '\0';
 
 			subjectsNames = getSubjectsNames("subjects.txt");
 
-			fflush(stdin);
-
 			for(i = 0; i < SUBJECTS_NUMBER; i++){
 				printf("Grade of subject %s: ", subjectsNames[i]);
-				fflush(stdin);
 				scanf("%d",&studentGrades[i]);  
 			}
 
@@ -110,7 +108,7 @@ int main(int argc, char * argv[]){
 			printf("Done\n\n");
 
 			displaySortOptions();
-			scanf("%d", &sortMethodSelected);
+			scanf("%d%*c", &sortMethodSelected);
 			sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
 
 			printf("\n------------ Grades sorted ----------------\n");
@@ -120,10 +118,12 @@ int main(int argc, char * argv[]){
 
 			sortedPositions = getSortedPositions(averagesList,studentsNumber);
 
-			fflush(stdin);
-
 			printf("Insert the name of the destiny file: ");
-			gets(dstFilename);
+			fgets(dstFilename, MAX_FILENAME_SIZE, stdin);
+
+			p = strchr(dstFilename,'\n');
+   			if (p) *p = '\0';
+
 
 			printToFile(namesList, gradesList, subjectsList, averagesList, studentsNumber, sortedPositions, dstFilename);
 
