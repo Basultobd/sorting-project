@@ -111,7 +111,7 @@ int main(int argc, char * argv[]){
 			scanf("%d%*c", &sortMethodSelected);
 			sortGrades(sortMethodSelected, gradesList, studentsNumber, subjectsList);
 
-			printf("\n------------ Grades sorted ----------------\n");
+			printf("Grades sorted...\n");
 			// displayFileInformation(subjectsList, namesList, gradesList, studentsNumber);
 
 			averagesList = calculateAverages(gradesList, studentsNumber);
