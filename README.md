@@ -4,18 +4,18 @@ This project sort the subjects grades of each student register in the grades.txt
 
 The program has two options:
 
-*Add new student register
-*sort the registers
+* Add new student register
+* sort the registers
 
 For sort the grades, I used:
 
-*Insertion sort
-*Bubblesort left
-*Bubblesort right
-*Shellsort
-*Mergersort
-*Quicksort
+* Insertion sort
+* Bubblesort left
+* Bubblesort right
+*  Shellsort
+* Mergersort
+* Quicksort
 
 For sort the registers, I used:
 
-*Mezcla directa
+* Mezcla directa
