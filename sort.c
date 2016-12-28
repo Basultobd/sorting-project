@@ -466,21 +466,3 @@ void sort(float *averagesList, int *positions, int studentsNumber){
 	}
 
 }
-
-
-void printGradesList(int **gradesList, int studentIndex){
-	int gradeIndex;
-	for(gradeIndex = 0; gradeIndex < SUBJECTS_NUMBER; gradeIndex++ ){
-		printf("%d ", gradesList[studentIndex][gradeIndex] );
-	}
-
-}
-
-void printAveragesList( float *averagesList, int studentsNumber ){
-	int averageIndex;
-	for(averageIndex = 0; averageIndex < studentsNumber; averageIndex++ ){
-		printf("El promedio del estudiante %d es : %.1f \n", averageIndex+1, averagesList[averageIndex] );
-	}
-}
-
-

@@ -18,10 +18,6 @@ void merge( int **gradesList, int lowPosition, int midPosition, int highPosition
 void quicksort( int **gradesList, int firstPosition, int lastPosition, int studentIndex, char ***subjectsList);
 void fastRecursive(int **gradesList, int firstPosition, int endPosition, int studentIndex, char ***subjectsList);
 
-//print function
-void printGradesList( int **arrayToSort, int i);
-void printAveragesList( float *averagesList, int studentsNumber);
-
 //sort the grades with the selected method
 void sortGrades( int sortMethodSelected, int **gradesList, int studentsNumber, char ***subjectsList );
 
